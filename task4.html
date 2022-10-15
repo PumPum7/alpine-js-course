@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    <title>Title</title>
+    <style>
+      button {
+        all: unset;
+        background: cornflowerblue;
+        padding: 10px 15px;
+        border-radius: 10px;
+        color: white;
+        cursor: pointer;
+        margin-right: 20px
+      }
+
+      .active {
+        background: deeppink;
+      }
+    </style>
+  </head>
+  <body>
+    <div x-data="tabs()">
+      <div>
+        <template x-for="tab in tabs" :key="tab.id">
+          <button
+                  @click="activeTab = tab.id"
+                  :class="{'active': getActiveStatus(tab.id)}"
+                  x-text="tab.title"
+          >
+
+          </button>
+        </template>
+      </div>
+      <div>
+        <template x-for="tab in tabs" :key="tab.id">
+          <div x-show="getActiveStatus(tab.id)"
+          x-transition:enter.duration.200.origin.top.right>
+            <p x-text="tab.text"></p>
+          </div>
+        </template>
+      </div>
+    </div>
+  </body>
+
+  <script>
+    function tabs() {
+      return {
+        activeTab: 0,
+        tabs: [
+          {id: 0, title: "Tab 1", text: "Tab 1 Text"},
+          {id: 1, title: "Tab 2", text: "Tab 2 Text"},
+          {id: 2, title: "Tab 3", text: "Tab 3 Text"}
+        ],
+        getActiveStatus(id) {
+          return id === this.activeTab
+        }
+      }
+    }
+  </script>
+
+</html>

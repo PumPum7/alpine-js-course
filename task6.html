@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
+  <title>Title</title>
+</head>
+<body>
+
+<div x-data="{name: ''}">
+  <label>Your name</label>
+  <label>
+    <input type="text" x-model="name" x-ref="nameInput"/>
+  </label>
+  <p>Hi, my name is <span x-text="name || '_________________'"></span>!</p>
+  <button @click="$refs.nameInput.focus()">set focus</button>
+</div>
+
+</body>
+</html>

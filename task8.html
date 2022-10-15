@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    <title>Title</title>
+</head>
+<body>
+<div x-data="dogFetcher()" x-init="init()" style="display: flex; flex-direction: column;">
+    <label>What breed?</label>
+    <input type="text" x-model.debounce.750="breed" style="width:50%; margin: 10px 0px"/>
+
+    <template x-if="fetchStatus === 'error'">
+        <p class="error">There was an error fetching the data please try again.</p>
+    </template>
+
+    <p x-show="!breed" class="prompt">Lets go fetch some pups!</p>
+
+    <div x-show="fetchStatus === 'loading'" class="spinner">
+        loading
+    </div>
+
+    <template x-if="data.status === 'success'">
+        <img :src="data.message" alt="Dog image" style="width:50%"/>
+    </template>
+</div>
+
+</body>
+
+<script>
+	function dogFetcher() {
+		return {
+			breed: "corgi",
+			fetchStatus: "loading",
+			data: null,
+			init() {
+				this.$watch('breed', () => {
+					this.fetchDogs()
+				})
+				this.fetchDogs()
+			},
+			fetchDogs() {
+				this.fetchStatus = 'loading'
+				fetch(`https://dog.ceo/api/breed/${this.breed}/images/random`)
+					.then(res => {
+						if (!res.ok) {
+							this.fetchStatus = 'error'
+						}
+						return res.json()
+					})
+					.then(data => {
+						this.fetchStatus = 'idle'
+						this.data = data
+					})
+					.catch(error => {
+						this.fetchStatus = 'error'
+						console.log({error})
+					})
+			}
+		}
+	}
+</script>
+
+</html>
